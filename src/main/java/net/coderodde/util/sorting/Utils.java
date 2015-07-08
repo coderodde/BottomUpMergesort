@@ -10,8 +10,8 @@ import java.util.Random;
  * @version 1.6
  */
 public class Utils {
-    
-    
+
+
     /**
      * Tests whether the range {@code array[fromIndex], array[fromIndex + 1],
      * ..., array[toIndex - 2], array[toIndex - 1]} is sorted into ascending 
@@ -33,10 +33,10 @@ public class Utils {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Tests whether the array {@code array} is sorted into ascending order as
      * specified by {@code cmp}.
@@ -49,7 +49,7 @@ public class Utils {
     public static <T> boolean isSorted(T[] array, Comparator<? super T> cmp) {
         return isSorted(array, 0, array.length, cmp);
     }
-    
+
     /**
      * Returns {@code true} if the two input arrays are of the same length, and
      * both have identical array components.
@@ -63,16 +63,16 @@ public class Utils {
         if (arr1.length != arr2.length) {
             return false;
         }
-        
+
         for (int i = 0; i < arr1.length; ++i) {
             if (arr1[i] != arr2[i]) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * This method creates a random array of integers.
      * 
@@ -82,11 +82,11 @@ public class Utils {
      */
     public static Integer[] createRandomIntegerArray(int size, Random random) {
         Integer[] ret = new Integer[size];
-        
+
         for (int i = 0; i < size; ++i) {
             ret[i] = random.nextInt();
         }
-        
+
         return ret;
     }
 }

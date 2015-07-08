@@ -11,13 +11,13 @@ import java.util.Comparator;
  * @version 1.6
  */
 public class BottomUpMergesort {
-    
+
     /**
      * Specifies the maximum length of a chunk which is sorted using insertion
      * sort.
      */
     private static final int INSERTIONSORT_THRESHOLD = 13;
-    
+
     /**
      * Sorts the range {@code array[fromIndex], array[fromIndex + 1], ...,
      * array[toIndex - 2], array[toIndex - 1]}.
@@ -36,22 +36,22 @@ public class BottomUpMergesort {
             // Trivially sorted or indices ass-basckwards.
             return;
         }
-        
+
         // Create the auxiliary buffer.
         int rangeLength = toIndex - fromIndex;
         T[] buffer = Arrays.copyOfRange(array, fromIndex, toIndex);
-        
+
         // Find out how many merge passes we need to do over the input range.
         int runs = rangeLength / INSERTIONSORT_THRESHOLD +
                   (rangeLength % INSERTIONSORT_THRESHOLD != 0 ? 1 : 0);
         int mergePasses = getMergePassAmount(runs);
-        
+
         // Set up the state.
         T[] source;
         T[] target;
         int sourceOffset;
         int targetOffset;
-        
+
         if (mergePasses % 2 == 0) {
             // If here, we will do an even amount of merge passes.
             source = array;
@@ -65,7 +65,7 @@ public class BottomUpMergesort {
             sourceOffset = 0;
             targetOffset = fromIndex;
         }
-        
+
         // Create the initial runs.
         for (int i = 0; i < runs - 1; ++i) {
             int tmpIndex = sourceOffset + i * INSERTIONSORT_THRESHOLD;
@@ -74,7 +74,7 @@ public class BottomUpMergesort {
                           tmpIndex + INSERTIONSORT_THRESHOLD,
                           cmp);
         }
-        
+
         // Do not forget the last (the righmost) run. Note, that the length of
         // the last run may vary between 1 and INSERTIONS_SORT_THRESHOLD, 
         // inclusively.
@@ -85,15 +85,15 @@ public class BottomUpMergesort {
                       Math.min(lastRunStartIndex + INSERTIONSORT_THRESHOLD, 
                                sourceOffset + rangeLength),
                       cmp);
-        
+
         // Initial runs are ready to be merged. 'runWidth <<= 1' multiplies
         // 'runWidth' by 2.
         for (int runWidth = INSERTIONSORT_THRESHOLD; 
                  runWidth < rangeLength;
                  runWidth <<= 1) {
-            
+
             int runIndex = 0;
-            
+
             for (; runIndex < runs - 1; runIndex += 2) {
                 // Set up the indices.
                 int leftIndex = sourceOffset + runIndex * runWidth;
@@ -101,7 +101,7 @@ public class BottomUpMergesort {
                 int rightBound = Math.min(leftBound + runWidth, 
                                           rangeLength + sourceOffset);
                 int targetIndex = targetOffset + runIndex * runWidth;
-                
+
                 // Perform the actual merging.
                 merge(source,
                       target,
@@ -111,7 +111,7 @@ public class BottomUpMergesort {
                       targetIndex,
                       cmp);
             }
-            
+
             if (runIndex < runs) {
                 // 'runIndex' is the index of the "orphan" run at the end of the
                 // range being sorted. Since it may appear in the opposite 
@@ -123,7 +123,7 @@ public class BottomUpMergesort {
                                  targetOffset + runIndex * runWidth,
                                  rangeLength - runIndex * runWidth);
             }
-            
+
             runs = (runs >>> 1) + (runs % 2 == 0 ? 0 : 1);
             // Change the roles of the arrays.
             T[] tmparr = source;
@@ -134,7 +134,7 @@ public class BottomUpMergesort {
             targetOffset = tmp;
         }
     }
-    
+
     /**
      * Sorts the entire array.
      * 
@@ -145,7 +145,7 @@ public class BottomUpMergesort {
     public static <T> void sort(T[] array, Comparator<? super T> cmp) {
         sort(array, 0, array.length, cmp);
     }
-    
+
     /**
      * Sorts the range {@code array[fromIndex,], array[fromIndex + 1], ...,
      * array[toIndex - 2], array[toIndex - 1]} using insertion sort. This 
@@ -164,15 +164,15 @@ public class BottomUpMergesort {
         for (int i = fromIndex + 1; i < toIndex; ++i) {
             T element = array[i];
             int j = i;
-            
+
             for (; j > fromIndex && cmp.compare(array[j - 1], element) > 0; --j) {
                 array[j] = array[j - 1];
             }
-            
+
             array[j] = element;
         }
     }
-    
+
     /**
      * Returns the amount of merge passes needed to sort a range containing 
      * {@code runs} runs. (A run is any contiguous, strictly descending or
@@ -184,7 +184,7 @@ public class BottomUpMergesort {
     private static int getMergePassAmount(int runs) {
         return 32 - Integer.numberOfLeadingZeros(runs - 1);
     }
-    
+
     /**
      * Merges the sorted ranges {@code source[leftIndex, leftBound)} and
      * {@code source[rightIndex, rightBound)} putting the result to 
@@ -209,20 +209,20 @@ public class BottomUpMergesort {
                                   int targetIndex,
                                   Comparator<? super T> cmp) {
         int rightIndex = leftBound;
-        
+
         while (leftIndex < leftBound && rightIndex < rightBound) {
             target[targetIndex++] = 
                     cmp.compare(source[rightIndex], source[leftIndex]) < 0 ?
                     source[rightIndex++] :
                     source[leftIndex++];
         }
-        
+
         System.arraycopy(source, 
                          leftIndex, 
                          target, 
                          targetIndex, 
                          leftBound - leftIndex);
-        
+
         System.arraycopy(source, 
                          rightIndex, 
                          target, 
