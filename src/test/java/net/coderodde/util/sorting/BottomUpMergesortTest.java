@@ -79,6 +79,7 @@ public class BottomUpMergesortTest {
                 startIndex = tmp;
             }
             
+//            System.out.println("op: " + op);
             BottomUpMergesort.sort(array1, 
                                    startIndex, 
                                    endIndex, 
@@ -122,5 +123,6 @@ public class BottomUpMergesortTest {
         Integer[] array = new Integer[]{ 3, 2, 1, 9, -4, 3, 5, 4, -8, 1,
                                          31, -4, -3, 8, 8, 8, 2 };
         BottomUpMergesort.sort(array, 3, 13, Integer::compare);
+        assertTrue(isSorted(array, 3, 13, Integer::compare));
     }
 }

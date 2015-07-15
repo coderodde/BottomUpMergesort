@@ -84,7 +84,7 @@ public class Utils {
         Integer[] ret = new Integer[size];
 
         for (int i = 0; i < size; ++i) {
-            ret[i] = random.nextInt();
+            ret[i] = random.nextInt(size);
         }
 
         return ret;
